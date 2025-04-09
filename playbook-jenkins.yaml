@@ -1,0 +1,45 @@
+---
+- name: Install Specific Version of Jenkins (2.375.1)
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update all packages
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+
+    - name: Download Jenkins repository file
+      get_url:
+        url: https://pkg.jenkins.io/redhat/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: Import Jenkins GPG key (2019 for older versions)
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+    - name: Install Java 17 Amazon Corretto
+      dnf:
+        name: java-17-amazon-corretto
+        state: present
+
+    - name: Download Jenkins version 2.375.1
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins-2.375.1-1.1.noarch.rpm
+        dest: /tmp/jenkins-2.375.1.rpm
+
+    - name: Install Jenkins from RPM
+      yum:
+        name: /tmp/jenkins-2.375.1.rpm
+        state: present
+
+    - name: Enable Jenkins service
+      systemd:
+        name: jenkins
+        enabled: yes
+
+    - name: Start Jenkins service
+      systemd:
+        name: jenkins
+        state: started
