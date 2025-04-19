@@ -1,8 +1,6 @@
 FROM amazonlinux:latest
 MAINTAINER gopi gopi@gmail.com
-RUN yum update -y && \
-    yum install -y java-1.8.0-openjdk wget && \
-    yum clean all
+RUN dnf install -y java-17-amazon-corretto wget shadow-utils && dnf clean all
 RUN useradd -m jenkins
 WORKDIR /opt/jenkins
 RUN wget https://get.jenkins.io/war-stable/latest/jenkins.war
