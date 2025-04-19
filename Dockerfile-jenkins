@@ -4,5 +4,5 @@ RUN dnf install -y java-17-amazon-corretto wget shadow-utils && dnf clean all
 RUN useradd -m jenkins
 WORKDIR /opt/jenkins
 RUN wget https://get.jenkins.io/war-stable/latest/jenkins.war
-EXPOSE 8080 50000
+EXPOSE 8080
 CMD ["java", "-jar", "jenkins.war"]
